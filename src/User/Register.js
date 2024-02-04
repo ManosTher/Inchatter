@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail ] = useState('');
+  const [password, setPassword ] = useState('');
+  const auth = getAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle registration logic here
+  
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
   };
 
   return (
@@ -18,7 +32,7 @@ const Register = () => {
           <label className="block text-gray-700">Email</label>
           <input
             type="email"
-            value={email}
+            value={email }
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 placeholder-gray-300 border rounded mt-1 focus:outline-none focus:ring focus:border-blue-300"
             required
