@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './firebase/firebaseConfig.js';
+import './User/firestore_db.js';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

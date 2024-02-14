@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { db } from '../firebase/firebaseConfig';
+import { collection, addDoc } from "firebase/firestore"; 
+
 
 const Register = () => {
-  const [email, setEmail ] = useState('');
-  const [password, setPassword ] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const auth = getAuth();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
-  
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up 
+      .then(async (userCredential) => {
         const user = userCredential.user;
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
+        console.log(user); // Signed up
+        try {
+          const docRef = await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            email: user.email
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
       });
   };
 
